@@ -1981,6 +1981,11 @@ function openNewsPage(n){
 /* ========== 頁面切換（SPA，支援瀏覽器上一頁） ========== */
 const views = ['home','newslist','work','dogs','dog','news','donate','goods','shop','faq'];
 
+// 交給網站自己控制捲動位置，避免 Safari 返回後把畫面還原到上一頁的位置
+if('scrollRestoration' in history){
+  try{ history.scrollRestoration = 'manual'; }catch(err){ /* 忽略 */ }
+}
+
 // 沙箱 iframe（about:srcdoc）不允許使用 history API，先偵測是否可用
 let historyOK = true;
 try{
@@ -2000,10 +2005,16 @@ function applyView(name){
   document.querySelectorAll('.nav-links button').forEach(b =>
     b.classList.toggle('active', b.dataset.view === navName)
   );
-  window.scrollTo({top:0, behavior:'instant'});
+  window.scrollTo(0, 0);
+  // Safari 有時會在 popstate 之後才還原捲動位置，下一幀再壓一次
+  requestAnimationFrame(()=> window.scrollTo(0, 0));
 }
 
 function currentView(){
+  if(historyOK){
+    const active = document.querySelector('.view.active');
+    return active ? active.id.replace('view-', '') : 'home';
+  }
   return fallbackStack[fallbackStack.length - 1] || 'home';
 }
 
