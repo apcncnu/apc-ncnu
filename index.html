@@ -327,6 +327,10 @@
   .tag-traits{ display:flex; flex-wrap:wrap; align-content:flex-start; gap:6px; margin-bottom:8px; min-height:calc(3 * 1.72rem + 2 * 6px); }
   .chip{ font-size:0.72rem; font-weight:700; padding:3px 10px; border-radius:999px; background:#EAF0DE; color:var(--sage-deep); }
   .tag-desc{ font-size:0.88rem; color:var(--ink-soft); }
+  .tag-more{ margin-top:auto; padding-top:12px; font-family:'Noto Sans TC',sans-serif;
+    font-size:0.88rem; font-weight:800; color:var(--amber-deep); letter-spacing:0.02em; }
+  .tag:hover .tag-more{ color:var(--rose-deep); }
+  .tag.is-adopted .tag-more{ color:var(--ink-soft); }
 
   /* ---------- MODALS ---------- */
   .modal-overlay{ display:none; position:fixed; inset:0; background:rgba(59,42,32,0.45); align-items:center; justify-content:center; padding:20px; }
@@ -2192,6 +2196,7 @@ function dogCard(d, clickable = true){
     <h3>${d.name}${sex ? `<span class="sex ${sex}">${sex === 'male' ? '♂ 公' : '♀ 母'}</span>` : ''}</h3>
     <div class="tag-traits">${d.traits.map(t=>`<span class="chip">${t}</span>`).join('')}</div>
     <div class="tag-desc">${d.desc}</div>
+    <div class="tag-more">認識${d.name} →</div>
   `;
   el.addEventListener('click', ()=> clickable ? openDogPage(d) : playTransition(()=> showView('dogs')));
   return el;
